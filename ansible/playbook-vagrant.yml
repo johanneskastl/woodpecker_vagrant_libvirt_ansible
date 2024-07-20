@@ -27,3 +27,6 @@
 
 - name: 'Run playbook-server-configure_and_start_forgejo.yml'
   ansible.builtin.import_playbook: playbook-server-configure_and_start_forgejo.yml
+
+- name: 'Run playbook-server-install_woodpecker.yml'
+  ansible.builtin.import_playbook: playbook-server-install_woodpecker.yml

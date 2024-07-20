@@ -24,6 +24,10 @@
           sleep 10
           forgejo admin user -c /etc/forgejo/conf/app.ini create --username forgejo-admin --email forgejo-admin@invalid --password totallyinsecure --admin
       become_user: forgejo
+      register: forgejo_admin_creation
+      until: forgejo_admin_creation.rc == 0
+      retries: 5
+      delay: 15
 
   tasks:
 

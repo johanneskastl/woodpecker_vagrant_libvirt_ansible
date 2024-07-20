@@ -1,0 +1,13 @@
+---
+- name: 'Bootstrap Python'
+  hosts: 'all'
+  gather_facts: false
+  become: true
+
+  tasks:
+
+    - name: 'Update repository metadata'
+      ansible.builtin.raw: zypper -n refresh
+
+    - name: 'Bootstrap python'
+      ansible.builtin.raw: zypper -n install python311

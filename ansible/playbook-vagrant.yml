@@ -14,3 +14,10 @@
 
 - name: 'Run playbook-all_nodes-minimal_bashrc.yml'
   ansible.builtin.import_playbook: playbook-all_nodes-minimal_bashrc.yml
+
+#
+# server
+#
+
+- name: 'Run playbook-server-add_Branch_devel_tools_scm_repository.yml'
+  ansible.builtin.import_playbook: playbook-server-add_Branch_devel_tools_scm_repository.yml

@@ -1,0 +1,56 @@
+---
+- name: 'Configure and start forgejo'
+  hosts: 'woodpecker-server'
+  gather_facts: true
+  become: true
+
+  pre_tasks:
+
+    - name: 'Install ACL package to work around "temporary files" errors in Ansible'
+      ansible.builtin.package:
+        name: 'acl'
+        state: 'present'
+
+  handlers:
+
+    - name: 'Restart the forgejo service'
+      ansible.builtin.service:
+        name: 'forgejo'
+        state: 'restarted'
+
+    - name: 'Create admin user (pauses 10 seconds to avoid hitting a locked database after the service restart'
+      ansible.builtin.shell:
+        cmd: |
+          sleep 10
+          forgejo admin user -c /etc/forgejo/conf/app.ini create --username forgejo-admin --email forgejo-admin@invalid --password totallyinsecure --admin
+      become_user: forgejo
+
+  tasks:
+
+    - name: 'Create /etc/forgejo/conf/app.ini'
+      ansible.builtin.template:
+        src: 'app.ini.j2'
+        dest: '/etc/forgejo/conf/app.ini'
+        owner: 'forgejo'
+        group: 'forgejo'
+        mode: '660'
+      notify:
+        - 'Restart the forgejo service'
+
+    - name: 'Start and enable the forgejo service'
+      ansible.builtin.service:
+        name: 'forgejo'
+        state: 'started'
+        enabled: true
+      notify:
+        - 'Create admin user (pauses 10 seconds to avoid hitting a locked database after the service restart'
+
+  post_tasks:
+
+    - name: 'Output Forgejo URL'
+      ansible.builtin.debug:
+        msg: "Forgejo is waiting for you on this URL: http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:3000"
+
+    - name: 'Output Forgejo credentials'
+      ansible.builtin.debug:
+        msg: "Use the username 'forgejo-admin' with the password 'totallyinsecure'"

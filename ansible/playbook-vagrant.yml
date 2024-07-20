@@ -30,3 +30,10 @@
 
 - name: 'Run playbook-server-install_woodpecker.yml'
   ansible.builtin.import_playbook: playbook-server-install_woodpecker.yml
+
+#
+# agent
+#
+
+- name: 'Run playbook-agent-install_woodpecker_agent.yml'
+  ansible.builtin.import_playbook: playbook-agent-install_woodpecker_agent.yml

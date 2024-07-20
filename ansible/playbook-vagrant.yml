@@ -21,3 +21,6 @@
 
 - name: 'Run playbook-server-add_Branch_devel_tools_scm_repository.yml'
   ansible.builtin.import_playbook: playbook-server-add_Branch_devel_tools_scm_repository.yml
+
+- name: 'Run playbook-server-install_forgejo.yml'
+  ansible.builtin.import_playbook: playbook-server-install_forgejo.yml

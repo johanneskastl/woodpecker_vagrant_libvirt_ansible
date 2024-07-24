@@ -7,7 +7,12 @@
   tasks:
 
     - name: 'Update repository metadata'
-      ansible.builtin.raw: zypper -n refresh
+      ansible.builtin.raw: LANG=C zypper -n refresh
+      register: zypper_refresh_output
+      changed_when: "'Retrieving repository' in zypper_refresh_output.stdout"
 
     - name: 'Bootstrap python'
-      ansible.builtin.raw: zypper -n install python311
+      ansible.builtin.raw: LANG=C zypper -n install python311
+      register: zypper_install_output
+      changed_when:
+        - "'Nothing to do' not in zypper_install_output.stdout"

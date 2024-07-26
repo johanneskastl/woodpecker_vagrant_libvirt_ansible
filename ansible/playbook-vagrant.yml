@@ -43,3 +43,6 @@
 
 - name: 'Run playbook-agent-install_woodpecker_agent.yml'
   ansible.builtin.import_playbook: playbook-agent-install_woodpecker_agent.yml
+
+- name: 'Run playbook-agent-configure_and_start_woodpecker_agent.yml'
+  ansible.builtin.import_playbook: playbook-agent-configure_and_start_woodpecker_agent.yml

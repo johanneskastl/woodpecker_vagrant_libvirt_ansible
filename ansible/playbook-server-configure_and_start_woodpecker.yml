@@ -1,0 +1,46 @@
+---
+- name: 'Configure and start the Woodpecker Server'
+  hosts: 'woodpecker-server'
+  gather_facts: true
+  become: true
+
+  tasks:
+
+    - name: 'Fail if Forgejo OAuth variables are not set'
+      ansible.builtin.fail:
+        msg: 'Please create a group_vars file containing the woodpecker_forgejo_client variable'
+      when:
+        - woodpecker_forgejo_client is undefined
+
+    - name: 'Fail if Forgejo OAuth variables are not set'
+      ansible.builtin.fail:
+        msg: 'Please create a group_vars file containing the woodpecker_forgejo_secret variable'
+      when:
+        - woodpecker_forgejo_secret is undefined
+
+    - name: 'Create the /etc/woodpecker/woodpecker-server.env file'
+      ansible.builtin.template:
+        src: 'woodpecker-server.env.j2'
+        dest: '/etc/woodpecker/woodpecker-server.env'
+        owner: 'woodpecker'
+        group: 'woodpecker'
+        mode: '0640'
+      notify:
+        - 'Restart the woodpecker-server service'
+
+    - name: 'Flush handlers'
+      ansible.builtin.meta: flush_handlers
+
+    - name: 'Start and enable the service'
+      ansible.builtin.service:
+        name: 'woodpecker-server'
+        state: 'started'
+        enabled: true
+
+
+  handlers:
+
+    - name: 'Restart the woodpecker-server service'
+      ansible.builtin.service:
+        name: 'woodpecker-server'
+        state: 'restarted'

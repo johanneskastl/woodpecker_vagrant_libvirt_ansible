@@ -1,0 +1,45 @@
+---
+- name: 'Gather facts on all VMs'
+  hosts: 'all'
+  gather_facts: true
+  become: true
+
+- name: 'Configure and start the Woodpecker agent'
+  hosts: 'woodpecker-agent'
+  gather_facts: true
+  become: true
+
+  tasks:
+
+    - name: 'Fail if the Agent key variable is not set'
+      ansible.builtin.fail:
+        msg: 'Please create a group_vars file containing the woodpecker_agent_secret variable'
+      when:
+        - woodpecker_agent_secret is undefined
+
+    - name: 'Create the /etc/woodpecker/woodpecker-agent.env file'
+      ansible.builtin.template:
+        src: 'woodpecker-agent.env.j2'
+        dest: '/etc/woodpecker/woodpecker-agent.env'
+        owner: 'woodpecker'
+        group: 'woodpecker'
+        mode: '0640'
+      notify:
+        - 'Restart the woodpecker-agent service'
+
+    - name: 'Flush handlers'
+      ansible.builtin.meta: flush_handlers
+
+    - name: 'Start and enable the service'
+      ansible.builtin.service:
+        name: 'woodpecker-agent'
+        state: 'started'
+        enabled: true
+
+
+  handlers:
+
+    - name: 'Restart the woodpecker-agent service'
+      ansible.builtin.service:
+        name: 'woodpecker-agent'
+        state: 'restarted'

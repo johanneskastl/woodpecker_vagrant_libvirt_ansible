@@ -35,18 +35,34 @@ Vagrantfile, please beware that this will break the Ansible provisioning.
    In addition, it will be removed once you destroy the Vagrant VMs.
 
 1. Run `vagrant provision` which will start the Ansible provisioning again. This
-   time, it should not fail but should setup the Woodpecker server instance
-   properly.
+   time, it should fail later, during the agent configuration, but should setup
+   the Woodpecker server instance properly.
 1. Open `http://192.2.0.13:8000` and click on `Log in with 192.2.0.13`.
    Authorize "Woodpecker" to access your account by clicking on the **Authorized
    Application** button.
 1. You are now logged in on your Woodpecker server.
+1. Click on the cogwheel on the top right, go to **Agents** and set up a new
+   agent called `vagrant-libvirt`. Copy the key and create a new file
+   `ansible/group_vars/all/woodpecker_agent_secret.yml`.
+
+   ```yaml
+   ---
+
+   woodpecker_agent_secret: "your-key-goes-here"
+   ```
+
+   Again, this file is being ignored by Git, so it will not be checked in by
+   accident.  In addition, it will be removed once you destroy the Vagrant VMs.
+1. Run `vagrant provision` which will start the Ansible provisioning again. This
+   time, it should not fail at all. After it finished, you should see that your
+   agent connected to the server!
 1. Party!
 
 ## Cleaning up
 
 The VMs can be torn down after playing around using `vagrant destroy`. This also
-removes the `ansible/group_vars/all/woodpecker_oauth_credentials.yml` file.
+removes the `ansible/group_vars/all/woodpecker_oauth_credentials.yml` and
+`ansible/group_vars/all/woodpecker_agent_secret.yml` files.
 
 ## License
 

@@ -3,3 +3,6 @@
 #
 .vagrant
 Vagrantfile.1
+
+# ignore the file containing the OAUTH credentials
+ansible/group_vars/all/woodpecker_oauth_credentials.yml

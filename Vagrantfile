@@ -47,6 +47,11 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "ansible/playbook-vagrant.yml"
     end # node.vm.provision
 
+    node.trigger.after :destroy do |trigger|
+      trigger.warn = "Removing ansible/group_vars/all/woodpecker_oauth_credentials.yml"
+      trigger.run = {inline: "rm -vf ansible/group_vars/all/woodpecker_oauth_credentials.yml"}
+    end # node.trigger.after
+
   end # config.vm.define
 
 end # Vagrant.configure

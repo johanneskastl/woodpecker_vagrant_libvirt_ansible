@@ -6,3 +6,6 @@ Vagrantfile.1
 
 # ignore the file containing the OAUTH credentials
 ansible/group_vars/all/woodpecker_oauth_credentials.yml
+
+# ignore the file with the Agent secret
+ansible/group_vars/all/woodpecker_agent_secret.yml

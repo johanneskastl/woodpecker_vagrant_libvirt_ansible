@@ -37,6 +37,9 @@
         state: 'started'
         enabled: true
 
+    - name: 'Output Woodpecker Server URL'
+      ansible.builtin.debug:
+        msg: "Your Woodpecker server is waiting for you on this URL: http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:8000"
 
   handlers:
 

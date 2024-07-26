@@ -34,8 +34,8 @@
 - name: 'Run playbook-server-install_woodpecker.yml'
   ansible.builtin.import_playbook: playbook-server-install_woodpecker.yml
 
-- name: 'Run playbook-server-configure_and_start_woodpecker.yml'
-  ansible.builtin.import_playbook: playbook-server-configure_and_start_woodpecker.yml
+- name: 'Run playbook-server-configure_and_start_woodpecker_server.yml'
+  ansible.builtin.import_playbook: playbook-server-configure_and_start_woodpecker_server.yml
 
 #
 # agent
